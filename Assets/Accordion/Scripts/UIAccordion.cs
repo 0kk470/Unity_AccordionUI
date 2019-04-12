@@ -97,4 +97,24 @@ namespace UnityEngine.UI
             }
         }
     }
+
+    public class yourUIClass:MonoBehaviour
+    {
+        private UIAccordion m_UIAccordion;
+
+        private void Awake()
+        {
+            m_UIAccordion = GetComponent<UIAccordion>(); 
+            m_UIAccordion.onSelectElement.AddListener(OnElementSelect);
+        }
+
+        private void OnDestroy()
+        {
+            m_UIAccordion.onSelectElement.RemoveListener(OnElementSelect);
+        }
+        private void OnElementSelect(int index)
+        {
+            Debug.Log("New Element Index:" + index);
+        }
+    }
 }
