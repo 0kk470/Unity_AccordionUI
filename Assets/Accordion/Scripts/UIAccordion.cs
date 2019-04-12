@@ -61,6 +61,7 @@ namespace UnityEngine.UI
                 m_iSelectIndex = -1;
                 return;
             }
+            int iPreIndex = m_iSelectIndex;
             bool isFound = false;
             for(int i = 0;i < m_elements.Length;i++)
             {
@@ -75,7 +76,7 @@ namespace UnityEngine.UI
             {
                 m_iSelectIndex = -1;
             }
-            if(m_iSelectIndex >= 0)
+            if (m_iSelectIndex >= 0 && m_iSelectIndex != iPreIndex)
             {
                 Debug.Log("New Index : " + m_iSelectIndex);
                 onSelectElement.Invoke(m_iSelectIndex);

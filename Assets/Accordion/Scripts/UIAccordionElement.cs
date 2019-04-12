@@ -14,7 +14,9 @@ namespace UnityEngine.UI
 		private UIAccordion m_Accordion;
 		private RectTransform m_RectTransform;
 		private LayoutElement m_LayoutElement;
-		
+
+        public bool isSelected = false;
+
 		[NonSerialized]
 		private readonly TweenRunner<FloatTween> m_FloatTweenRunner;
 		
@@ -22,7 +24,6 @@ namespace UnityEngine.UI
 		{
 			if (this.m_FloatTweenRunner == null)
 				this.m_FloatTweenRunner = new TweenRunner<FloatTween>();
-			
 			this.m_FloatTweenRunner.Init(this);
 		}
 		
@@ -72,15 +73,33 @@ namespace UnityEngine.UI
 				return;
 			
 			UIAccordion.Transition transition = (this.m_Accordion != null) ? this.m_Accordion.transition : UIAccordion.Transition.Instant;
-			
+            bool allowSwitchOff = this.group.allowSwitchOff;
+       
 			if (transition == UIAccordion.Transition.Instant)
 			{
 				if (state)
 				{
-					this.m_LayoutElement.preferredHeight = -1f;
+                    if(!allowSwitchOff)
+                    {
+                        if(isSelected)
+                        {
+                            this.m_LayoutElement.preferredHeight = this.m_MinHeight;
+                        }
+                        else
+                        {
+                            this.m_LayoutElement.preferredHeight = -1f;
+                        }
+                        isSelected = !isSelected;
+                    }
+                    else
+                    {
+                        isSelected = true;
+                        this.m_LayoutElement.preferredHeight = -1f;
+                    }
 				}
 				else
 				{
+                    isSelected = false;
 					this.m_LayoutElement.preferredHeight = this.m_MinHeight;
 				}
 			}
@@ -88,10 +107,27 @@ namespace UnityEngine.UI
 			{
 				if (state)
 				{
-					this.StartTween(this.m_MinHeight, this.GetExpandedHeight());
+                    if (!allowSwitchOff)
+                    {
+                        if (isSelected)
+                        {
+                            this.StartTween(this.m_RectTransform.rect.height, this.m_MinHeight);
+                        }
+                        else
+                        {
+                            this.StartTween(this.m_MinHeight, this.GetExpandedHeight());
+                        }
+                        isSelected = !isSelected;
+                    }
+                    else
+                    {
+                        isSelected = true;
+                        this.StartTween(this.m_MinHeight, this.GetExpandedHeight());
+                    }
 				}
 				else
 				{
+                    isSelected = false;
 					this.StartTween(this.m_RectTransform.rect.height, this.m_MinHeight);
 				}
 			}
