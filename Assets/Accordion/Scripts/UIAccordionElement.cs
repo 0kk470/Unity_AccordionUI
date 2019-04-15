@@ -148,6 +148,8 @@ namespace UnityEngine.UI
 			
 			float originalPrefH = this.m_LayoutElement.preferredHeight;
 			this.m_LayoutElement.preferredHeight = -1f;
+			 //The RectTransform's sizeDelta is updated at the second frame by default.If you don't force it to update,you'll get (0,0) at the first frame(On the Start)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(this.m_RectTransform);
 			float h = LayoutUtility.GetPreferredHeight(this.m_RectTransform);
 			this.m_LayoutElement.preferredHeight = originalPrefH;
 			
