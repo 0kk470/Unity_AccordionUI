@@ -37,35 +37,39 @@ namespace UnityEngine.UI
 			this.m_LayoutElement = this.gameObject.GetComponent<LayoutElement>();
 			this.onValueChanged.AddListener(OnValueChanged);
 		}
+
+#if UNITY_EDITOR
+        // This function is only available in Editor Mode
+        protected override void OnValidate()
+        {
+            base.OnValidate();
+
+            if (this.group == null)
+            {
+                ToggleGroup tg = this.GetComponentInParent<ToggleGroup>();
+
+                if (tg != null)
+                {
+                    this.group = tg;
+                }
+            }
+
+            LayoutElement le = this.gameObject.GetComponent<LayoutElement>();
+
+            if (le != null)
+            {
+                if (this.isOn)
+                {
+                    le.preferredHeight = -1f;
+                }
+                else
+                {
+                    le.preferredHeight = this.m_MinHeight;
+                }
+            }
+        }
+#endif
 		
-		protected override void OnValidate()
-		{
-			base.OnValidate();
-			
-			if (this.group == null)
-			{
-				ToggleGroup tg = this.GetComponentInParent<ToggleGroup>();
-				
-				if (tg != null)
-				{
-					this.group = tg;
-				}
-			}
-			
-			LayoutElement le = this.gameObject.GetComponent<LayoutElement>();
-			
-			if (le != null)
-			{
-				if (this.isOn)
-				{
-					le.preferredHeight = -1f;
-				}
-				else
-				{
-					le.preferredHeight = this.m_MinHeight;
-				}
-			}
-		}
 		
 		public void OnValueChanged(bool state)
 		{
@@ -148,7 +152,7 @@ namespace UnityEngine.UI
 			
 			float originalPrefH = this.m_LayoutElement.preferredHeight;
 			this.m_LayoutElement.preferredHeight = -1f;
-			 //The RectTransform's sizeDelta is updated at the second frame by default.If you don't force it to update,you'll get (0,0) at the first frame(On the Start)
+            //The RectTransform's sizeDelta is updated at the second frame by default.If you don't force it to update,you'll get (0,0) at the first frame(On the Start)
             LayoutRebuilder.ForceRebuildLayoutImmediate(this.m_RectTransform);
 			float h = LayoutUtility.GetPreferredHeight(this.m_RectTransform);
 			this.m_LayoutElement.preferredHeight = originalPrefH;
