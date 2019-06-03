@@ -25,8 +25,14 @@ namespace UnityEngine.UI
 		[SerializeField] private float m_TransitionDuration = 0.3f;
         [SerializeField] private UIAccordionElement[] m_elements;
 
-        public OnSelectElement onSelectElement;
-    
+
+        [SerializeField]
+        private OnSelectElement m_onSelectElement = new OnSelectElement();
+        public OnSelectElement onSelectElement
+        {
+            get { return m_onSelectElement; }
+            set { m_onSelectElement = value; }
+        }
 
         private int m_iSelectIndex = -1;
 
