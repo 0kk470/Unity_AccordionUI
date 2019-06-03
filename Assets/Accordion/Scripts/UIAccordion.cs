@@ -93,8 +93,13 @@ namespace UnityEngine.UI
             {
                 var element = m_elements[index];
                 if (element.isOn)
-                    element.isOn = false;
-                element.isOn = true;
+                {
+                    onSelectElement.Invoke(index);
+                }
+                else
+                {
+                    element.isOn = true;
+                }
             }
         }
     }
